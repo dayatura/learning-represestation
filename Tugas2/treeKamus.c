@@ -9,21 +9,28 @@ typedef struct Node
     struct Node *right; 
 } Node;
 
+
 Node* Kamus(char *data);
-void printKamus(Node* kamus);
+void printKamus(Node* kamus, int deep);
 void addWord(Node* kamus, char* word);
 
-int main(){
-    Node *kamus  = Kamus("ayam");
 
+int main(){
+    int deep = 0;
+
+    ///////////////////kamus dengan tree
+    Node *kamus  = Kamus("ayam");
     // printKamus(kamus);
     addWord(kamus, "domba");
     addWord(kamus, "cicak");
+    addWord(kamus, "candaan");
+    addWord(kamus, "candi");
     addWord(kamus, "bebek");
-    addWord(kamus, "bkbek");
+    addWord(kamus, "dambaan");
+    printKamus(kamus, deep);
+    printf("\n");
 
-    printKamus(kamus);
-
+	
     return 0;
 }
 
@@ -43,36 +50,38 @@ Node* Kamus(char *data)
     return(node); 
 }
 
-void printKamus(Node* kamus){
+void printKamus(Node* kamus, int deep){
     
     printf("%c", kamus->data);
 
     if (kamus->left) {
+        // printf("(%d)", deep);
+        deep++;
         printf("-");
-        printKamus(kamus->left);
+        printKamus(kamus->left, deep);
+        deep--;
     }
 
     if (kamus->right) {
-        printf("\n|\n");
-        printKamus(kamus->right);
+        
+        printf("\n");
+        // printf("%d", deep);
+        if(deep != 0)
+        for(int i = 0; i < (deep); i++)
+        {
+            printf("  ");
+        }
+        
+        printf("|\n");
+
+        if(deep != 0)
+        for(int i = 0; i < deep; i++)
+        {
+            printf("  ");
+        }
+
+        printKamus(kamus->right, deep);
     }
-    
-    // printf("%d ", kamus);
-    // printf("%c ", kamus->data);
-
-    // if (!kamus->right) {
-    //     printf("kanan kosong %d ", kamus->right);
-    //     // printKamus(kamus->right);
-    // }
-
-    // if(!kamus->left){
-    //     printf("kiri kosong %d\n", kamus->left);
-    // }else{
-    //     printf("kiri tidak kosong, %d\n", kamus->left);
-    //     printKamus(kamus->left);
-    // }
-    
-    
 
 }
 
