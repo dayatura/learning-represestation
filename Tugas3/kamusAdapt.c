@@ -213,7 +213,12 @@ bool search_word(char *t, char *s, unsigned int s_idx, unsigned int s_length, un
 
     if (s_length - s_idx == 1)
     {
-        return c == s[s_idx] && get_mark_node(t, n_idx);
+        if (c == s[s_idx]){
+            return get_mark_node(t, n_idx);
+        }else{
+            unsigned int r_idx = get_right_node(t, n_idx);
+            return r_idx == NULL_INDEX ? false : search_word(t, s, s_idx, s_length, r_idx);
+        }
     }
     else
     {
@@ -460,6 +465,19 @@ unsigned int get_line_number(char *filename){
 
 typedef char *string;
 
+char* String_Lower(char *kata) 
+{
+	int i = 0; 
+	while (kata[i] != '\0') 
+	{
+    	if (kata[i] >= 'A' && kata[i] <= 'Z') {
+        	kata[i] = kata[i] + 32;
+    	}
+      	i++;
+	}
+    return kata;
+}
+
 void insert_tree_by_file(char* t, char* filename){
     unsigned int num_of_line = get_line_number(filename);
 
@@ -478,7 +496,8 @@ void insert_tree_by_file(char* t, char* filename){
     my = fopen(filename,"r");
     for(i = 0; i < num_of_line; i++){
         fscanf(my, "%s", array[i]);
-        insert_tree(t, array[i]);
+        // printf("%s\n", String_Lower(array[i]));
+        insert_tree(t, String_Lower(array[i]));
     }
     fclose(my);
 
@@ -491,10 +510,18 @@ void insert_tree_by_file(char* t, char* filename){
 
 
 
+
+
 // =============================== MAIN PROGRAM ====================================
 
 int main()
 {
+
+    // =================== PLAY GROUND ============================
+
+
+
+
     // int LEFT_FLAG = 1;                          // 1
     // int RIGHT_FLAG = LEFT_FLAG + addrSize;      // 5
     // int END_FLAG = RIGHT_FLAG + addrSize;       // 9
@@ -510,7 +537,7 @@ int main()
     // t = load_tree(t, "pohonFull3Byte");
     // t = load_tree(t, "pohonFull4Byte");
 
-    t = load_tree(t, "kamusIndonesia");
+    t = load_tree(t, "kamusKataIndonesia");
     
 
     // ===================== TREE CONVERTER =========================
@@ -524,8 +551,15 @@ int main()
     
     // ===================== INPUT TREE BY FILE =======================
     // insert_tree_by_file(t, "kata-dasar-indonesia.txt");
+    // insert_tree_by_file(t, "kata_a.txt");
+
+    // insert_tree_by_file(t, "kata_a_new.txt");
 
     // ===================== INPUT TREE MANUALY ========================
+    // insert_tree(t, "domba");
+    // insert_tree(t, "dombaf");
+    // insert_tree(t, "dombak");
+
     // insert_tree(t, "domba");
     // insert_tree(t, "cicak");
     // insert_tree(t, "candaan");
@@ -561,17 +595,24 @@ int main()
     // ------- print by information -------------
   
     printf("*---------------------------*\n");
-    printf("| index |        ISI        |\n");
-    printf("|---------------------------|\n");
+    printf("|   Dictionary Information  |\n");
+    printf("*---------------------------*\n");
 
-    printf("| 00000 |       %05u       | <-- Root\n", get_root_node(t));
-    printf("| 00004 |       %05u       | <-- Curr\n", get_curr_node(t));
-    printf("| 00008 |       %05u       | <-- SizeMax\n", get_size_max(t));
-    printf("| 00012 |       %u Byte      | <-- Address Size\n", get_address_size(t));
+    printf(" Root         |> %u\n", get_root_node(t));
+    printf(" Curr         |> %u\n", get_curr_node(t));
+    printf(" SizeMax      |> %u\n", get_size_max(t));
+    printf(" Address Size |> %u Byte\n", get_address_size(t));
+
+    // char * kata = "domba";
+    // printf("Kata %s kondisi %d \n", kata, search_tree(t, kata));
     
+    // char ayam[] = "Aku Seorang Kapiten Yeay\n";
+    // printf("%s", strlwr(ayam));
+    // char stop;
+    // scanf("%c", stop);
 
     // ======================= SAVING TREEE ========================
-    // save_tree(t, "kamusIndonesia");
+    // save_tree(t, "kamusKataIndonesia");
 
     return 0;
 }
